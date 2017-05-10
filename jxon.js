@@ -185,8 +185,10 @@
           if (opts.lowerCaseTags) {
             oAttribName = oAttribName.toLowerCase();
           }
-
-          oAttrParent[sAPrefix + oAttribName] = parseText(oAttrib.value.trim());
+          //check for namespaces
+          if(oAttribName.indexOf("xmlns:")!=0){
+            oAttrParent[sAPrefix + oAttribName] = parseText(oAttrib.value.trim());
+          }
         }
 
         if (bNesteAttr) {
