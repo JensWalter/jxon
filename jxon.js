@@ -187,7 +187,18 @@
           }
           //check for namespaces
           if(oAttribName.indexOf("xmlns:")!=0){
-            oAttrParent[sAPrefix + oAttribName] = parseText(oAttrib.value.trim());
+            //check for type declaration
+            if (oAttribName.indexOf("xsi:type")==0) {
+              //check config for explicit configured array types
+              var content = parseText(oAttrib.value.trim());
+              if(opts.arrTypes.indexOf(content)>=0 && oParentNode.constructor !== Array) {
+                if (oParentNode.constructor !== Array) {
+                  vResult=[vResult];
+                }
+              }
+            }else{
+              oAttrParent[sAPrefix + oAttribName] = parseText(oAttrib.value.trim());
+            }
           }
         }
 
