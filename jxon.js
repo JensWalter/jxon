@@ -163,8 +163,12 @@
           if (vResult[sProp].constructor !== Array) {
             vResult[sProp] = [vResult[sProp]];
           }
-
-          vResult[sProp].push(vContent);
+          //join arrays if both are array types
+          if(vResult[sProp].constructor == Array && vContent.constructor == Array){
+            vResult[sProp] = vResult[sProp].concat(vContent);
+          }else{
+            vResult[sProp].push(vContent);
+          }
         } else {
           vResult[sProp] = vContent;
 
@@ -191,8 +195,14 @@
             if (oAttribName.indexOf("xsi:type")==0) {
               //check config for explicit configured array types
               var content = parseText(oAttrib.value.trim());
-              if(opts.arrTypes.indexOf(content)>=0 && oParentNode.constructor !== Array) {
+              //remove namespace prefix if existent
+              if(content.indexOf(':')>=0){
+                content=content.substring(content.indexOf(':')+1);
+              }
+              if(opts.arrTypes && opts.arrTypes.constructor == Array
+                && opts.arrTypes.indexOf(content)>=0 && oParentNode.constructor !== Array) {
                 if (oParentNode.constructor !== Array) {
+                  console.log('injecting array');
                   vResult=[vResult];
                 }
               }
